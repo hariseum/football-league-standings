@@ -20,33 +20,33 @@ const Highlights = () => {
     );
   }
 
-  // useEffect(() => {
-  //   axios("https://www.scorebat.com/video-api/v3/").then((res) => {
-  //     console.log(res.data.response);
-  //     setData(res.data.response);
-  //   });
-  // }, []);
-
-  const getData = () => {
-    fetch("data.json", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      // setData(res.data.response);
-      .then((data) => data.json())
-      .then((data) => {
-        console.log(data);
-        setData(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
   useEffect(() => {
-    getData();
+    axios("https://www.scorebat.com/video-api/v3/").then((res) => {
+      console.log(res.data.response);
+      setData(res.data.response);
+    });
   }, []);
+
+  // const getData = () => {
+  //   fetch("data.json", {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //   })
+  //     // setData(res.data.response);
+  //     .then((data) => data.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setData(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <div className="highlights-container">
