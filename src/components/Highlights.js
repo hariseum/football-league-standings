@@ -53,7 +53,7 @@ const Highlights = () => {
       {data.map((data) => (
         <div key={data.title} className="highlight-div">
           <a href={data.matchviewUrl} target="_blank" rel="noreferrer">
-            <img src={data.thumbnail} alt="pic" width="280" />
+            <img src={data.thumbnail} alt="pic" width="250" />
           </a>
           <p>{matchDate(data.date)}</p>
           <h1>{data.title}</h1>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Standings = () => {
+const Standings = (props) => {
   const [data, setData] = useState([]);
-  const [selectedLeague, setSelectedLeague] = useState("eng.1");
+  const [selectedLeague, setSelectedLeague] = useState(props.clickedLeagueName);
   const [selectedYear, setSelectedYear] = useState("2021");
 
   useEffect(() => {
@@ -16,6 +16,31 @@ const Standings = () => {
       })
       .catch((err) => console.log(err));
   }, [selectedYear, selectedLeague]);
+
+  const descrip = new Set();
+  const addToDescrip = (obj) => {
+    descrip.add(obj);
+  };
+  data.map((data) => addToDescrip(data.note?.description));
+  descrip.delete(undefined);
+  let d = Array.from(descrip);
+  //console.log(d)
+
+  const dColor = new Set();
+  const addTodColor = (c) => {
+    dColor.add(c);
+  };
+  data.map((data) => addTodColor(data.note?.color));
+  dColor.delete(undefined);
+  let c = Array.from(dColor);
+  //console.log(c)
+
+  var dict = {};
+  d.forEach((key, i) => (dict[key] = c[i]));
+  //console.log(dict);
+  if (Object.keys(dict).length > 0) {
+    document.getElementById('qr').innerText = 'Qualification/Relegation'
+  }
 
   return (
     <div className="standings-container">
@@ -70,9 +95,10 @@ const Standings = () => {
         <table className="standings">
           <tbody>
             <tr className="table-head">
+              <td></td>
               <td className="team-position">#</td>
               <td></td>
-              <td className="team-name">Team</td>
+              <td className="team-name">Club</td>
               <td title="Matches played">MP</td>
               <td title="Wins">W</td>
               <td title="Draws">D</td>
@@ -82,70 +108,78 @@ const Standings = () => {
               <td title="Goals difference">GD</td>
               <td title="Team points">Pts</td>
             </tr>
-            <tr className="table-data">
-              <td className="team-position">
-                {data.map((data, index) => (
+            {data.map((data, index) => (
+              <tr className="table-data">
+                <td>
+                  <div
+                    style={{
+                      backgroundColor: data?.note?.color || "#242424",
+                      color: "transparent",
+                      width: "4px",
+                      borderRadius: "25px",
+                    }}
+                  >
+                    |
+                  </div>
+                </td>
+                <td className="team-position">
                   <div key={data.team.id}>{`${index + 1}.`}</div>
-                ))}
-              </td>
-              <td>
-                <div className="crest">
-                  {data.map((data, index) => (
+                </td>
+                <td>
+                  <div className="crest">
                     <div key={data.team.id}>
-                      <img src={data.team.logos[0].href} alt="#" />
+                      <img src={data.team?.logos[0]?.href || null} alt="#" />
                     </div>
-                  ))}
-                </div>
-              </td>
-              <td className="team-name">
-                <span>
-                  {data.map((data, index) => (
-                    <div key={data.team.id}>{data.team.displayName}</div>
-                  ))}
-                </span>
-              </td>
-              <td>
-                {data.map((data, index) => (
+                  </div>
+                </td>
+                <td className="team-name">
+                  <span>
+                    <div key={data.team.id}>{data.team.shortDisplayName}</div>
+                  </span>
+                </td>
+                <td>
                   <div key={data.team.id}>{data.stats[3].value}</div>
-                ))}
-              </td>
-              <td>
-                {data.map((data, index) => (
+                </td>
+                <td>
                   <div key={data.team.id}>{data.stats[0].value}</div>
-                ))}
-              </td>
-              <td>
-                {data.map((data, index) => (
+                </td>
+                <td>
                   <div key={data.team.id}>{data.stats[2].value}</div>
-                ))}
-              </td>
-              <td>
-                {data.map((data, index) => (
+                </td>
+                <td>
                   <div key={data.team.id}>{data.stats[1].value}</div>
-                ))}
-              </td>
-              <td>
-                {data.map((data, index) => (
+                </td>
+                <td>
                   <div key={data.team.id}>{data.stats[4].value}</div>
-                ))}
-              </td>
-              <td>
-                {data.map((data, index) => (
+                </td>
+                <td>
                   <div key={data.team.id}>{data.stats[5].value}</div>
-                ))}
-              </td>
-              <td>
-                {data.map((data, index) => (
+                </td>
+                <td>
                   <div key={data.team.id}>{data.stats[9].value}</div>
-                ))}
-              </td>
-              <td className="team-points">
-                {data.map((data, index) => (
+                </td>
+                <td className="team-points">
                   <div key={data.team.id}>{data.stats[6].value}</div>
-                ))}
-              </td>
-            </tr>
+                </td>
+              </tr>
+            ))}
           </tbody>
+        </table>
+      </div>
+      <div className="quali-rele">
+        <h4 id="qr" style={{ marginBottom: "4px" }}>Non-European Club</h4>
+        <table>
+          {Object.keys(dict).map((key, index) => (
+            <tbody>
+              <tr>
+                <td
+                  className="square-box"
+                  style={{ backgroundColor: dict[key] }}
+                ></td>
+                <td>&nbsp;{key}</td>
+              </tr>
+            </tbody>
+          ))}
         </table>
       </div>
     </div>

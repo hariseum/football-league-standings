@@ -6,26 +6,32 @@ import Highlights from './Highlights';
 
 const Content = () => {
     const [active,setActive] = useState('leagues');
+    const [leagueName,setLeagueName] = useState('eng.1')
+
+    const clickedLeagueHandler =(switchName) => {
+        setActive(switchName[0])
+        setLeagueName(switchName[1])
+    }
 
     return (
         <div className='content-container'>
             <div className='tabs'>
-                <div className='tab-leagues' onClick={()=>setActive('leagues')}>
-                    <h2 style={{color: active==='leagues' ? "#ffffff" : "#696969", fontSize: active==='leagues' ? "27px" : null}}>Leagues</h2>
+                <div className={active==='leagues' ? 'tab-leagues-active' : 'tab-leagues'} onClick={()=>setActive('leagues')}>
+                    <h2 style={{color: active==='leagues' ? "#ffffff" : "#696969"}}>LEAGUES</h2>
                 </div>
-                <div className='tab-standings' onClick={()=>setActive('standings')}>
-                    <h2 style={{color: active==='standings' ? "#ffffff" : "#696969", fontSize: active==='standings' ? "27px" : null}}>Standings</h2>
+                <div className={active==='standings' ? 'tab-standings-active' : 'tab-standings'} onClick={()=>setActive('standings')}>
+                    <h2 style={{color: active==='standings' ? "#ffffff" : "#696969"}}>STANDINGS</h2>
                 </div>
-                <div className='tab-highlights' onClick={()=>setActive('highlights')}>
-                    <h2 style={{color: active==='highlights' ? "#ffffff" : "#696969", fontSize: active==='highlights' ? "27px" : null}}>Highlights</h2>
+                <div className={active==='highlights' ? 'tab-highlights-active' : 'tab-highlights'} onClick={()=>setActive('highlights')}>
+                    <h2 style={{color: active==='highlights' ? "#ffffff" : "#696969"}}>HIGHLIGHTS</h2>
                 </div>
             </div>
             {(() => {
                 switch (active) {
                     case 'leagues':
-                        return <Leagues />
+                        return <Leagues onClickedLeague={clickedLeagueHandler} />
                     case 'standings':
-                        return <Standings />
+                        return <Standings clickedLeagueName={leagueName} />
                     case 'highlights':
                         return <Highlights />
                     default:

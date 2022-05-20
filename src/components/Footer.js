@@ -3,7 +3,7 @@ import '../App.css';
 const Footer = () => {
     return (
         <div className='footer'>
-            <p>Football League Standings &copy;</p>
+            <p>f&#250;tbol engine &copy;</p>
         </div>
     );
 }
